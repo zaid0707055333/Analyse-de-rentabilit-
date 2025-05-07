@@ -3,90 +3,542 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analyse Rentabilité Transport </title>
+  <title>Analyse Rentabilité Transport</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #6366f1;
+      --primary-dark: #4338ca;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --neutral: #6b7280;
+      --background: #f9fafb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --border: #e5e7eb;
+      --border-focus: #d1d5db;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     body {
-      font-family: Arial, sans-serif;
-      background: #f3f4f6;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .header p {
+      color: var(--text-light);
+    }
+    
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    
+    .card-header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      min-height: 100vh;
-      margin: 0;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
     }
-    .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 600px;
+    
+    .card-header i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-right: 1rem;
     }
-    select, input, button {
-      width: 100%;
-      padding: 0.75rem;
+    
+    .card-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .form-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
       margin-bottom: 1rem;
-      border: 1px solid #ccc;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .form-section h3 i {
+      margin-right: 0.5rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    @media (min-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .input-icon-wrapper {
+      position: relative;
+    }
+    
+    .input-icon-wrapper i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+    
+    .input-icon-wrapper input, 
+    .input-icon-wrapper select {
+      padding-left: 2.5rem;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
       border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s;
     }
-    button {
-      background-color: #2563eb;
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+    
+    input:disabled {
+      background-color: var(--background);
+      cursor: not-allowed;
+    }
+    
+    .input-suffix {
+      position: relative;
+    }
+    
+    .input-suffix:after {
+      content: attr(data-suffix);
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-weight: 500;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      background-color: var(--primary);
       color: white;
-      font-weight: bold;
       border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
     }
+    
+    .btn i {
+      margin-right: 0.5rem;
+    }
+    
+    .btn:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .btn-reset {
+      background-color: var(--neutral);
+      margin-right: 1rem;
+    }
+    
+    .btn-reset:hover {
+      background-color: #4b5563;
+    }
+    
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+    
     .result {
-      margin-top: 1rem;
+      display: none;
+    }
+    
+    .result-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .result-header i {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    @media (min-width: 640px) {
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .summary-card {
+      background: var(--background);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    
+    .summary-card h4 {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+    
+    .summary-card p {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .cost-breakdown {
+      margin-top: 1.5rem;
+    }
+    
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .breakdown-item:last-child {
+      border-bottom: none;
+    }
+    
+    .breakdown-item-label {
+      display: flex;
+      align-items: center;
+    }
+    
+    .breakdown-item-label i {
+      margin-right: 0.75rem;
+      width: 1.5rem;
+      text-align: center;
+      color: var(--primary);
+    }
+    
+    .breakdown-item-value {
+      font-weight: 600;
+    }
+    
+    .decision {
+      margin-top: 2rem;
       padding: 1rem;
       border-radius: 8px;
-      background-color: #f9fafb;
+      text-align: center;
     }
-    .go { color: green; font-weight: bold; }
-    .nogo { color: red; font-weight: bold; }
+    
+    .decision.go {
+      background-color: rgba(34, 197, 94, 0.1);
+      border: 1px solid var(--success);
+      color: var(--success);
+    }
+    
+    .decision.nogo {
+      background-color: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+    }
+    
+    .decision i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .decision p {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 0.5rem;
+      color: var(--text-light);
+    }
+    
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 0.5rem;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.75rem;
+      font-weight: normal;
+    }
+    
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: var(--text-light);
+      font-size: 0.875rem;
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #6366f1;
+        --primary-light: #818cf8;
+        --primary-dark: #4f46e5;
+        --success: #22c55e;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --neutral: #6b7280;
+        --background: #111827;
+        --card: #1f2937;
+        --text: #f3f4f6;
+        --text-light: #9ca3af;
+        --border: #374151;
+        --border-focus: #4b5563;
+        --shadow: rgba(0, 0, 0, 0.25);
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2> Analyse de rentabilité V 1.2</h2>
-
-    <form id="goNoGoForm">
-      <label>⛽ Prix du gasoil (DH/L)</label>
-      <input type="number" step="0.01" name="gasoilPrice" required min="0">
-
-      <label>⚖️ Poids total du produit (kg)</label>
-      <input type="number" step="1" name="productWeight" required min="0">
-
-      <label>🛒 Prix d'achat du produit (DH)</label>
-      <input type="number" step="0.01" name="purchasePrice" required min="0">
-
-      <label>💸 Prix de vente du produit (DH)</label>
-      <input type="number" step="0.01" name="sellingPrice" required min="0">
-
-      <label>🛣️ Frais d'autoroute (Aller seulement, en DH)</label>
-      <input type="number" step="0.01" name="autoroutePrice" id="autoroutePrice" min="0" value="0">
-
-      <label>🧾 Frais de déplacement chauffeur (DH)</label>
-      <input type="number" step="0.01" name="fraisDeplacement" id="fraisDeplacement" min="0" value="0">
-
-      <label>👨‍🔧 Frais journalier du chauffeur (DH)</label>
-      <input type="number" step="0.01" name="fraisChauffeur" id="fraisChauffeur" min="0" value="0">
-
-      <label>🚚 Ville de départ</label>
-      <select id="startLocation" required><option value="">Ville de départ</option></select>
-
-      <label>📍 Ville d'arrivée</label>
-      <select id="endLocation" required><option value="">Ville d'arrivée</option></select>
-
-      <label>🛣️ Distance aller (km)</label>
-      <input type="number" id="distance" name="distance" step="0.1" readonly>
-
-      <button type="submit">📊 Calculer</button>
-    </form>
-
-    <div id="result" class="result" style="display: none;"></div>
+    <div class="header">
+      <h1>Analyse de Rentabilité Transport</h1>
+      <p>Calculez rapidement la rentabilité de vos transports</p>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-calculator"></i>
+        <h2>Paramètres de calcul</h2>
+      </div>
+      
+      <form id="goNoGoForm">
+        <div class="form-section">
+          <h3><i class="fas fa-route"></i> Trajet</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="startLocation">Ville de départ</label>
+              <div class="input-icon-wrapper">
+                <i class="fas fa-map-marker-alt"></i>
+                <select id="startLocation" required>
+                  <option value="">Sélectionnez une ville</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="endLocation">Ville d'arrivée</label>
+              <div class="input-icon-wrapper">
+                <i class="fas fa-flag-checkered"></i>
+                <select id="endLocation" required>
+                  <option value="">Sélectionnez une ville</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="distance">Distance aller (km)</label>
+              <div class="input-icon-wrapper">
+                <i class="fas fa-road"></i>
+                <input type="number" id="distance" name="distance" step="0.1" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h3><i class="fas fa-box"></i> Produit</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="productWeight">Poids total du produit</label>
+              <div class="input-icon-wrapper input-suffix" data-suffix="kg">
+                <i class="fas fa-weight-hanging"></i>
+                <input type="number" step="1" id="productWeight" name="productWeight" required min="0">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="vehicleType">Type de véhicule recommandé</label>
+              <div class="input-icon-wrapper">
+                <i class="fas fa-truck"></i>
+                <input type="text" id="vehicleType" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h3><i class="fas fa-money-bill-wave"></i> Coûts et prix</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="purchasePrice">Prix d'achat du produit</label>
+              <div class="input-icon-wrapper input-suffix" data-suffix="DH">
+                <i class="fas fa-shopping-cart"></i>
+                <input type="number" step="0.01" id="purchasePrice" name="purchasePrice" required min="0">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="sellingPrice">Prix de vente du produit</label>
+              <div class="input-icon-wrapper input-suffix" data-suffix="DH">
+                <i class="fas fa-tag"></i>
+                <input type="number" step="0.01" id="sellingPrice" name="sellingPrice" required min="0">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="gasoilPrice">Prix du gasoil</label>
+              <div class="input-icon-wrapper input-suffix" data-suffix="DH/L">
+                <i class="fas fa-gas-pump"></i>
+                <input type="number" step="0.01" id="gasoilPrice" name="gasoilPrice" required min="0">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h3><i class="fas fa-coins"></i> Frais supplémentaires</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="autoroutePrice">
+                Frais d'autoroute (Aller seulement)
+                <span class="tooltip">
+                  <i class="fas fa-info-circle"></i>
+                  <span class="tooltip-text">Le calcul prendra en compte l'aller-retour automatiquement</span>
+                </span>
+              </label>
+              <div class="input-icon-wrapper input-suffix" data-suffix="DH">
+                <i class="fas fa-road"></i>
+                <input type="number" step="0.01" id="autoroutePrice" name="autoroutePrice" min="0" value="0">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="fraisDeplacement">Frais de déplacement chauffeur</label>
+              <div class="input-icon-wrapper input-suffix" data-suffix="DH">
+                <i class="fas fa-utensils"></i>
+                <input type="number" step="0.01" id="fraisDeplacement" name="fraisDeplacement" min="0" value="0">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="fraisChauffeur">Frais journalier du chauffeur</label>
+              <div class="input-icon-wrapper input-suffix" data-suffix="DH">
+                <i class="fas fa-user"></i>
+                <input type="number" step="0.01" id="fraisChauffeur" name="fraisChauffeur" min="0" value="0">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" id="resetBtn" class="btn btn-reset">
+            <i class="fas fa-undo"></i> Réinitialiser
+          </button>
+          <button type="submit" class="btn">
+            <i class="fas fa-calculator"></i> Calculer la rentabilité
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <div id="result" class="card result">
+      <div class="card-header">
+        <i class="fas fa-chart-bar"></i>
+        <h2>Résultats de l'analyse</h2>
+      </div>
+      
+      <div id="resultContent"></div>
+    </div>
   </div>
+  
+  <footer>
+    <p>© 2025 Analyse de Rentabilité Transport - Version 2.0</p>
+  </footer>
 
   <script>
     const villesDepart = ["Berrechid", "Had Soualem", "Benahmed", "Bouskoura", "Marrakech", "Temara", "Sidi Ghanem"];
@@ -96,6 +548,8 @@
       "Sidi Bennour", "Sidi Rahal", "Sidi Smail", "Skhirat", "Soualem", "Temara", "Tit Mellil", "Youssoufia",
       "Casablanca", "Rabat", "Salé", "Kénitra", "Témara", "Sidi Yahya El Gharb", "Sidi Slimane", "Sidi Taibi",
       "Tiflet", "Skhirat", "Ain Atiq", "Ain El Aouda", "Oulmès", "Rommani","Sidi kacem","Safi","Fes",
+      "Béni Mellal", "Khouribga", "Khénifra", "Fquih Ben Salah", "Oued Zem", "Boujniba", "Boulanouare", 
+      "Bejaad", "Kasba Tadla", "Souk Sebt Oulad Nemma", "El Ksiba", "Zaouiat Cheikh"
     ];
 
     const distanceData = {
@@ -133,299 +587,132 @@
       "Had Soualem-Rommani": 155,
       "Had Soualem-Safi":225,
       "Had Soualem-Sidi Kacem":260,
-       // Distances pour Benahmed
-  "Benahmed-Ain Harrouda": 65,
-  "Benahmed-Ben Guerir": 175,
-  "Benahmed-Benslimane": 55,
-  "Benahmed-Bouskoura": 45,
-  "Benahmed-Casablanca": 75,
-  "Benahmed-El Jadida": 105,
-  "Benahmed-Marrakech": 275,
-  "Benahmed-Mediouna": 55,
-  "Benahmed-Mohammedia": 65,
-  "Benahmed-Nouaceur": 47,
-  "Benahmed-Oued Zem": 125,
-  "Benahmed-Settat": 40,
-  "Benahmed-Sidi Bennour": 120,
-  "Benahmed-Sidi Rahal": 60,
-  "Benahmed-Sidi Smail": 130,
-  "Benahmed-Skhirat": 110,
-  "Benahmed-Soualem": 47,
-  "Benahmed-Temara": 115,
-  "Benahmed-Tit Mellil": 60,
-  "Benahmed-Youssoufia": 170,
-  "Benahmed-Rabat": 125,
-  "Benahmed-Salé": 130,
-  "Benahmed-Kénitra": 155,
-  "Benahmed-Témara": 115,
-  "Benahmed-Sidi Yahya El Gharb": 185,
-  "Benahmed-Sidi Slimane": 195,
-  "Benahmed-Sidi Taibi": 160,
-  "Benahmed-Tiflet": 180,
-  "Benahmed-Ain Atiq": 125,
-  "Benahmed-Ain El Aouda": 135,
-  "Benahmed-Oulmès": 240,
-  "Benahmed-Rommani": 170,
+      // Distances pour Benahmed
+      "Benahmed-Ain Harrouda": 65,
+      "Benahmed-Ben Guerir": 175,
+      "Benahmed-Benslimane": 55,
+      "Benahmed-Bouskoura": 45,
+      "Benahmed-Casablanca": 75,
+      "Benahmed-El Jadida": 105,
+      "Benahmed-Marrakech": 275,
+      "Benahmed-Mediouna": 55,
+      "Benahmed-Mohammedia": 65,
+      "Benahmed-Nouaceur": 47,
+      "Benahmed-Oued Zem": 125,
+      "Benahmed-Settat": 40,
+      "Benahmed-Sidi Bennour": 120,
+      "Benahmed-Sidi Rahal": 60,
+      "Benahmed-Sidi Smail": 130,
+      "Benahmed-Skhirat": 110,
+      "Benahmed-Soualem": 47,
+      "Benahmed-Temara": 115,
+      "Benahmed-Tit Mellil": 60,
+      "Benahmed-Youssoufia": 170,
+      "Benahmed-Rabat": 125,
+      "Benahmed-Salé": 130,
+      "Benahmed-Kénitra": 155,
+      "Benahmed-Témara": 115,
+      "Benahmed-Sidi Yahya El Gharb": 185,
+      "Benahmed-Sidi Slimane": 195,
+      "Benahmed-Sidi Taibi": 160,
+      "Benahmed-Tiflet": 180,
+      "Benahmed-Ain Atiq": 125,
+      "Benahmed-Ain El Aouda": 135,
+      "Benahmed-Oulmès": 240,
+      "Benahmed-Rommani": 170,
 
-  // Distances pour Bouskoura
-  "Bouskoura-Ain Harrouda": 30,
-  "Bouskoura-Ben Guerir": 160,
-  "Bouskoura-Benslimane": 43,
-  "Bouskoura-Casablanca": 27,
-  "Bouskoura-El Jadida": 85,
-  "Bouskoura-Marrakech": 240,
-  "Bouskoura-Mediouna": 25,
-  "Bouskoura-Mohammedia": 40,
-  "Bouskoura-Nouaceur": 23,
-  "Bouskoura-Oued Zem": 100,
-  "Bouskoura-Settat": 35,
-  "Bouskoura-Sidi Bennour": 100,
-  "Bouskoura-Sidi Rahal": 50,
-  "Bouskoura-Sidi Smail": 110,
-  "Bouskoura-Skhirat": 85,
-  "Bouskoura-Soualem": 30,
-  "Bouskoura-Temara": 95,
-  "Bouskoura-Tit Mellil": 33,
-  "Bouskoura-Youssoufia": 145,
-  "Bouskoura-Rabat": 100,
-  "Bouskoura-Salé": 105,
-  "Bouskoura-Kénitra": 130,
-  "Bouskoura-Témara": 95,
-  "Bouskoura-Sidi Yahya El Gharb": 165,
-  "Bouskoura-Sidi Slimane": 175,
-  "Bouskoura-Sidi Taibi": 145,
-  "Bouskoura-Tiflet": 160,
-  "Bouskoura-Ain Atiq": 105,
-  "Bouskoura-Ain El Aouda": 100,
-  "Bouskoura-Oulmès": 205,
-  "Bouskoura-Rommani": 140,
+      // Distances pour Bouskoura
+      "Bouskoura-Ain Harrouda": 30,
+      "Bouskoura-Ben Guerir": 160,
+      "Bouskoura-Benslimane": 43,
+      "Bouskoura-Casablanca": 27,
+      "Bouskoura-El Jadida": 85,
+      "Bouskoura-Marrakech": 240,
+      "Bouskoura-Mediouna": 25,
+      "Bouskoura-Mohammedia": 40,
+      "Bouskoura-Nouaceur": 23,
+      "Bouskoura-Oued Zem": 100,
+      "Bouskoura-Settat": 35,
+      "Bouskoura-Sidi Bennour": 100,
+      "Bouskoura-Sidi Rahal": 50,
+      "Bouskoura-Sidi Smail": 110,
+      "Bouskoura-Skhirat": 85,
+      "Bouskoura-Soualem": 30,
+      "Bouskoura-Temara": 95,
+      "Bouskoura-Tit Mellil": 33,
+      "Bouskoura-Youssoufia": 145,
+      "Bouskoura-Rabat": 100,
+      "Bouskoura-Salé": 105,
+      "Bouskoura-Kénitra": 130,
+      "Bouskoura-Témara": 95,
+      "Bouskoura-Sidi Yahya El Gharb": 165,
+      "Bouskoura-Sidi Slimane": 175,
+      "Bouskoura-Sidi Taibi": 145,
+      "Bouskoura-Tiflet": 160,
+      "Bouskoura-Ain Atiq": 105,
+      "Bouskoura-Ain El Aouda": 100,
+      "Bouskoura-Oulmès": 205,
+      "Bouskoura-Rommani": 140,
+
       // Distances pour Sidi Ghanem
-"Sidi Ghanem-Ain Harrouda": 262,
-"Sidi Ghanem-Ben Guerir": 80,
-"Sidi Ghanem-Berrechid": 240,
-"Sidi Ghanem-Bouskoura": 250,
-"Sidi Ghanem-Casablanca": 250,
-"Sidi Ghanem-El Jadida": 277,
-"Sidi Ghanem-Had Soualem": 255,
-"Sidi Ghanem-Marrakech": 10,
-"Sidi Ghanem-Mediouna": 240,
-"Sidi Ghanem-Mohammedia": 260,
-"Sidi Ghanem-Nouaceur": 230,
-"Sidi Ghanem-Oued Zem": 245,
-"Sidi Ghanem-Settat": 210,
-"Sidi Ghanem-Sidi Bennour": 210,
-"Sidi Ghanem-Sidi Rahal": 270,
-"Sidi Ghanem-Skhirat": 320,
-"Sidi Ghanem-Soualem": 255,
-"Sidi Ghanem-Temara": 310,
-"Sidi Ghanem-Tit Mellil": 240,
-"Sidi Ghanem-Youssoufia": 130,
-"Sidi Ghanem-Rabat": 330,
-"Sidi Ghanem-Salé": 340,
-"Sidi Ghanem-Kénitra": 380,
-"Sidi Ghanem-Sidi Yahya El Gharb": 400,
-"Sidi Ghanem-Sidi Slimane": 410,
-"Sidi Ghanem-Sidi Taibi": 350,
-"Sidi Ghanem-Tiflet": 380,
-"Sidi Ghanem-Ain Atiq": 320,
-"Sidi Ghanem-Ain El Aouda": 310,
-"Sidi Ghanem-Oulmès": 290,
-"Sidi Ghanem-Rommani": 300,
-"Sidi Ghanem-Sidi kacem": 430,
-"Sidi Ghanem-Safi": 160,
-"Sidi Ghanem-Benahmed": 220,
+      "Sidi Ghanem-Ain Harrouda": 262,
+      "Sidi Ghanem-Ben Guerir": 80,
+      "Sidi Ghanem-Berrechid": 240,
+      "Sidi Ghanem-Bouskoura": 250,
+      "Sidi Ghanem-Casablanca": 250,
+      "Sidi Ghanem-El Jadida": 277,
+      "Sidi Ghanem-Had Soualem": 255,
+      "Sidi Ghanem-Marrakech": 10,
+      "Sidi Ghanem-Mediouna": 240,
+      "Sidi Ghanem-Mohammedia": 260,
+      "Sidi Ghanem-Nouaceur": 230,
+      "Sidi Ghanem-Oued Zem": 245,
+      "Sidi Ghanem-Settat": 210,
+      "Sidi Ghanem-Sidi Bennour": 210,
+      "Sidi Ghanem-Sidi Rahal": 270,
+      "Sidi Ghanem-Skhirat": 320,
+      "Sidi Ghanem-Soualem": 255,
+      "Sidi Ghanem-Temara": 310,
+      "Sidi Ghanem-Tit Mellil": 240,
+      "Sidi Ghanem-Youssoufia": 130,
+      "Sidi Ghanem-Rabat": 330,
+      "Sidi Ghanem-Salé": 340,
+      "Sidi Ghanem-Kénitra": 380,
+      "Sidi Ghanem-Sidi Yahya El Gharb": 400,
+      "Sidi Ghanem-Sidi Slimane": 410,
+      "Sidi Ghanem-Sidi Taibi": 350,
+      "Sidi Ghanem-Tiflet": 380,
+      "Sidi Ghanem-Ain Atiq": 320,
+      "Sidi Ghanem-Ain El Aouda": 310,
+      "Sidi Ghanem-Oulmès": 290,
+      "Sidi Ghanem-Rommani": 300,
+      "Sidi Ghanem-Sidi kacem": 430,
+      "Sidi Ghanem-Safi": 160,
+      "Sidi Ghanem-Benahmed": 220,
 
-  // Distances pour Marrakech
-  "Marrakech-Ain Harrouda": 280,
-  "Marrakech-Ben Guerir": 80,
-  "Marrakech-Benslimane": 285,
-  "Marrakech-Bouskoura": 240,
-  "Marrakech-Casablanca": 250,
-  "Marrakech-El Jadida": 195,
-  "Marrakech-Mediouna": 235,
-  "Marrakech-Mohammedia": 255,
-  "Marrakech-Nouaceur": 230,
-  "Marrakech-Oued Zem": 185,
-  "Marrakech-Settat": 155,
-  "Marrakech-Sidi Bennour": 205,
-  "Marrakech-Sidi Rahal": 200,
-  "Marrakech-Sidi Smail": 210,
-  "Marrakech-Skhirat": 305,
-  "Marrakech-Soualem": 240,
-  "Marrakech-Temara": 315,
-  "Marrakech-Tit Mellil": 250,
-  "Marrakech-Youssoufia": 185,
-  "Marrakech-Rabat": 325,
-  "Marrakech-Salé": 330,
-  "Marrakech-Kénitra": 365,
-  "Marrakech-Témara": 315,
-  "Marrakech-Sidi Yahya El Gharb": 400,
-  "Marrakech-Sidi Slimane": 410,
-  "Marrakech-Sidi Taibi": 380,
-  "Marrakech-Tiflet": 395,
-  "Marrakech-Ain Atiq": 305,
-  "Marrakech-Ain El Aouda": 300,
-  "Marrakech-Oulmès": 355,
-  "Marrakech-Rommani": 325,
-
-  // Distances pour Temara (compléments)
-  "Temara-Ain Harrouda": 100,
-  "Temara-Ben Guerir": 205,
-  "Temara-Benslimane": 90,
-  "Temara-Bouskoura": 95,
-  "Temara-El Jadida": 140,
-  "Temara-Mediouna": 90,
-  "Temara-Mohammedia": 75,
-  "Temara-Nouaceur": 80,
-  "Temara-Oued Zem": 125,
-  "Temara-Settat": 105,
-  "Temara-Sidi Bennour": 145,
-  "Temara-Sidi Rahal": 115,
-  "Temara-Sidi Smail": 150,
-  "Temara-Soualem": 95,
-  "Temara-Tit Mellil": 100,
-  "Temara-Youssoufia": 175,
-  "Temara-Salé": 25,
-  "Temara-Sidi Yahya El Gharb": 115,
-  "Temara-Sidi Slimane": 125,
-  "Temara-Sidi Taibi": 100,
-  "Temara-Tiflet": 130,
-  "Temara-Ain Atiq": 20,
-  "Temara-Ain El Aouda": 30,
-  "Temara-Oulmès": 155,
-  "Temara-Rommani": 115,
-  "Berrechid-Ain Harrouda": 45,
-  "Berrechid-Benahmed": 35,
-  "Berrechid-Ben Guerir": 155,
-  "Berrechid-Benslimane": 50,
-  "Berrechid-Bouskoura": 30,
-  "Berrechid-Casablanca": 44,
-  "Berrechid-El Jadida": 90,
-  "Berrechid-Had Soualem": 33,
-  "Berrechid-Marrakech": 245,
-  "Berrechid-Mediouna": 35,
-  "Berrechid-Mohammedia": 55,
-  "Berrechid-Nouaceur": 32,
-  "Berrechid-Oued Zem": 105,
-  "Berrechid-Settat": 25,
-  "Berrechid-Sidi Bennour": 105,
-  "Berrechid-Sidi Rahal": 55,
-  "Berrechid-Sidi Smail": 110,
-  "Berrechid-Skhirat": 95,
-  "Berrechid-Soualem": 35,
-  "Berrechid-Temara": 100,
-  "Berrechid-Tit Mellil": 43,
-  "Berrechid-Youssoufia": 150,
-  "Berrechid-Rabat": 97,
-  "Berrechid-Salé": 100,
-  "Berrechid-Kénitra": 135,
-  "Berrechid-Témara": 100,
-  "Berrechid-Sidi Yahya El Gharb": 165,
-  "Berrechid-Sidi Slimane": 175,
-  "Berrechid-Sidi Taibi": 145,
-  "Berrechid-Tiflet": 160,
-  "Berrechid-Ain Atiq": 105,
-  "Berrechid-Ain El Aouda": 115,
-  "Berrechid-Oulmès": 215,
-  "Berrechid-Rommani": 145,
-  "Berrechid-Sidi kacem": 260,
-  "Berrechid-Safi":250,
-  "Berrechid-Fes":350,
-
-  "Had Soualem-Casablanca": 40,
-  "Had Soualem-Rabat": 93,
-  "Had Soualem-Kénitra": 140,
-
-  "Benahmed-Casablanca": 75,
-  "Benahmed-Rabat": 125,
-
-  "Bouskoura-Casablanca": 27,
-  "Bouskoura-Rabat": 100,
-
-  "Marrakech-Casablanca": 250,
-  "Marrakech-Rabat": 325,
-
-  "Temara-Rabat": 20,
-  "Temara-Casablanca": 96,
-  "Temara-Kénitra": 105
-    };
-
-    const startSelect = document.getElementById("startLocation");
-    const endSelect = document.getElementById("endLocation");
-
-    villesDepart.forEach(ville => startSelect.add(new Option(ville, ville)));
-    villesArrivee.forEach(ville => endSelect.add(new Option(ville, ville)));
-
-    function updateDistanceField() {
-      const start = startSelect.value;
-      const end = endSelect.value;
-      const key = `${start}-${end}`;
-      const reverseKey = `${end}-${start}`;
-      const distance = distanceData[key] || distanceData[reverseKey] || "";
-      document.getElementById("distance").value = distance;
-    }
-
-    startSelect.addEventListener("change", updateDistanceField);
-    endSelect.addEventListener("change", updateDistanceField);
-
-    document.getElementById("goNoGoForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const gasoilPrice = parseFloat(document.querySelector("[name='gasoilPrice']").value);
-      const productWeight = parseFloat(document.querySelector("[name='productWeight']").value);
-      const purchasePrice = parseFloat(document.querySelector("[name='purchasePrice']").value);
-      const sellingPrice = parseFloat(document.querySelector("[name='sellingPrice']").value);
-      const autoroutePrice = parseFloat(document.querySelector("[name='autoroutePrice']").value) || 0;
-      const fraisDeplacement = parseFloat(document.querySelector("[name='fraisDeplacement']").value) || 0;
-      const fraisChauffeur = parseFloat(document.querySelector("[name='fraisChauffeur']").value) || 0;
-
-      const start = startSelect.value;
-      const end = endSelect.value;
-      const distance = parseFloat(document.getElementById("distance").value);
-
-      function choisirVehicule(poids) {
-        if (poids <= 2000) return { type: 'Pickup', consommation: 0.10 };
-        if (poids <= 3000) return { type: 'H100', consommation: 0.13 };
-        if (poids <= 3500) return { type: 'Master petite', consommation: 0.12 };
-        if (poids <= 4000) return { type: 'Master Renault', consommation: 0.12 };
-        if (poids <= 5000) return { type: 'Iveco Fourgon', consommation: 0.15 };
-        if (poids <= 7000) return { type: 'Canter', consommation: 0.20 };
-        if (poids <= 12000) return { type: 'Solo', consommation: 0.27 };
-        if (poids <= 27000) return { type: 'Camion Plateau', consommation: 0.36 };
-        if (poids <= 40000) return { type: 'Camion Benne', consommation: 0.42 };
-        return null;
-      }
-
-      const vehicule = choisirVehicule(productWeight);
-      if (!vehicule || !distance) {
-        alert("❌ Distance non trouvée ou véhicule non supporté.");
-        return;
-      }
-
-      const allerRetour = distance * 2;
-      const coutCarburant = allerRetour * vehicule.consommation * gasoilPrice;
-      const coutAutoroute = autoroutePrice * 2;
-      const coutTotal = coutCarburant + coutAutoroute + fraisDeplacement + fraisChauffeur;
-      const gain = sellingPrice - purchasePrice;
-      const seuil = gain / 4;
-      const isGo = coutTotal <= seuil;
-
-      document.getElementById("result").style.display = "block";
-      document.getElementById("result").innerHTML = `
-        <p><strong>🚗 Véhicule suggéré :</strong> ${vehicule.type}</p>
-        <p><strong>📍 Trajet :</strong> ${start} ➜ ${end} ➜ ${start}</p>
-        <p><strong>↔️ Distance aller-retour :</strong> ${allerRetour} km</p>
-        <p><strong>⛽ Coût carburant :</strong> ${coutCarburant.toFixed(2)} DH</p>
-        <p><strong>🛣️ Frais autoroute (AR) :</strong> ${coutAutoroute.toFixed(2)} DH</p>
-        <p><strong>🧾 Frais déplacement :</strong> ${fraisDeplacement.toFixed(2)} DH</p>
-        <p><strong>👨‍🔧 Frais chauffeur :</strong> ${fraisChauffeur.toFixed(2)} DH</p>
-        <p><strong>💸 Coût total :</strong> ${coutTotal.toFixed(2)} DH</p>
-        <p><strong>💰 Gain brut :</strong> ${gain.toFixed(2)} DH</p>
-        <p><strong>📉 Gain net :</strong> ${(gain - coutTotal).toFixed(2)} DH</p>
-        <p><strong>📊 Seuil max autorisé :</strong> ${seuil.toFixed(2)} DH</p>
-        <p class="${isGo ? 'go' : 'nogo'}">${isGo ? '✅ GO : Transport rentable' : '❌ NO GO : Trop cher'}</p>
-      `;
-    });
-  </script>
-</body>
-</html>
+      // Distances pour Marrakech
+      "Marrakech-Ain Harrouda": 280,
+      "Marrakech-Ben Guerir": 80,
+      "Marrakech-Benslimane": 285,
+      "Marrakech-Bouskoura": 240,
+      "Marrakech-Casablanca": 250,
+      "Marrakech-El Jadida": 195,
+      "Marrakech-Mediouna": 235,
+      "Marrakech-Mohammedia": 255,
+      "Marrakech-Nouaceur": 230,
+      "Marrakech-Oued Zem": 185,
+      "Marrakech-Settat": 155,
+      "Marrakech-Sidi Bennour": 205,
+      "Marrakech-Sidi Rahal": 200,
+      "Marrakech-Sidi Smail": 210,
+      "Marrakech-Skhirat": 305,
+      "Marrakech-Soualem": 240,
+      "Marrakech-Temara": 315,
+      "Marrakech-Tit Mellil": 250,
+      "Marrakech-Youssoufia": 185,
+      "Marrakech-Rabat": 325,
+      "Marrakech-Salé": 330,
+      "Marrakech-Kénitra": 365,
+      "Marrakech-Témara": 315,
+      "Marrakech-Sidi Yahya El Gharb": 400,
+      "Marrakech-Sidi Slimane":
