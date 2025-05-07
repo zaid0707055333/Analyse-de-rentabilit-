@@ -7,20 +7,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #b00000;
-      --primary-dark: #870000;
+      --primary: #a60e1a;
+      --primary-dark: #800910;
       --success: #15803d;
       --danger: #dc2626;
       --neutral: #f3f4f6;
       --text-main: #1f2937;
       --background: #ffffff;
       --card-radius: 12px;
-    }
-
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      --transition: 0.3s ease;
     }
 
     body {
@@ -40,13 +35,7 @@
       background: var(--background);
       border-radius: var(--card-radius);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      padding: 1.5rem;
-      animation: fadeIn 0.4s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      padding: 2rem;
     }
 
     h2 {
@@ -54,39 +43,49 @@
       font-weight: 700;
       text-align: center;
       color: var(--primary);
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     form {
       display: grid;
+      grid-template-columns: 1fr;
       gap: 1rem;
     }
 
-    @media (min-width: 640px) {
+    @media (min-width: 768px) {
       form {
         grid-template-columns: 1fr 1fr;
       }
     }
 
-    label {
+    .form-section {
+      grid-column: span 2;
+      margin-top: 1.5rem;
       font-weight: 600;
-      margin-bottom: 0.4rem;
-      color: #374151;
-      font-size: 0.95rem;
+      font-size: 1.1rem;
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.5rem;
     }
 
     .input-wrapper {
       display: flex;
       flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
     }
 
     input, select {
-      padding: 0.65rem 0.75rem;
+      padding: 1rem;
       border: 1px solid #d1d5db;
       border-radius: 10px;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       background-color: #fff;
-      transition: border-color 0.3s ease;
+      transition: border-color var(--transition);
     }
 
     input:focus, select:focus {
@@ -94,17 +93,24 @@
       outline: none;
     }
 
-    button {
+    .btn-group {
       grid-column: span 2;
-      padding: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    button {
+      flex: 1;
+      padding: 1rem;
       background-color: var(--primary);
       color: white;
       font-weight: 600;
       border: none;
       border-radius: 10px;
-      font-size: 1rem;
+      font-size: 1.05rem;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background-color var(--transition);
     }
 
     button:hover {
@@ -118,7 +124,6 @@
       padding: 1.5rem;
       line-height: 1.7;
       border-left: 6px solid var(--primary);
-      animation: fadeIn 0.3s ease-in-out;
     }
 
     .go {
@@ -130,12 +135,23 @@
       color: var(--danger);
       font-weight: bold;
     }
+
+    @media (max-width: 640px) {
+      input, select, button {
+        font-size: 1rem;
+        padding: 0.9rem;
+      }
+      .btn-group {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Analyse de Rentabilité Transport</h2>
     <form id="goNoGoForm">
+      <div class="form-section">🚛 Données du transport</div>
       <div class="input-wrapper">
         <label>Prix du gasoil (DH/L)</label>
         <input type="number" name="gasoilPrice" step="0.01" min="0" required />
@@ -144,6 +160,8 @@
         <label>Poids total du produit (kg)</label>
         <input type="number" name="productWeight" step="1" min="0" required />
       </div>
+
+      <div class="form-section">💰 Coûts et Prix</div>
       <div class="input-wrapper">
         <label>Prix d'achat du produit (DH)</label>
         <input type="number" name="purchasePrice" step="0.01" min="0" required />
@@ -164,6 +182,8 @@
         <label>Frais journalier du chauffeur (DH)</label>
         <input type="number" name="fraisChauffeur" step="0.01" min="0" value="0" />
       </div>
+
+      <div class="form-section">📍 Itinéraire</div>
       <div class="input-wrapper">
         <label>Ville de départ</label>
         <select id="startLocation" required><option value="">Sélectionner</option></select>
@@ -176,11 +196,15 @@
         <label>Distance aller (km)</label>
         <input type="number" id="distance" name="distance" readonly />
       </div>
-      <button type="submit">Calculer</button>
+
+      <div class="btn-group">
+        <button type="submit">📊 Calculer</button>
+        <button type="reset">🔄 Réinitialiser</button>
+      </div>
     </form>
     <div id="result" class="result" style="display:none"></div>
   </div>
- <script>
+  <script>
     const villesDepart = ["Berrechid", "Had Soualem", "Benahmed", "Bouskoura", "Marrakech", "Temara", "Sidi Ghanem"];
     const villesArrivee = [
       "Ain Harrouda", "Benahmed", "Ben Guerir", "Benslimane", "Berrechid", "Bouskoura", "Casablanca",
