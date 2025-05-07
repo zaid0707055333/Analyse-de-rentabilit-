@@ -1,94 +1,186 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analyse Rentabilité Transport </title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analyse Rentabilité Transport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f3f4f6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      min-height: 100vh;
+    :root {
+      --primary: #b00000;
+      --primary-dark: #870000;
+      --success: #15803d;
+      --danger: #dc2626;
+      --neutral: #f3f4f6;
+      --text-main: #1f2937;
+      --background: #ffffff;
+      --card-radius: 12px;
+    }
+
+    *, *::before, *::after {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 600px;
-    }
-    select, input, button {
-      width: 100%;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    button {
-      background-color: #2563eb;
-      color: white;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-    .result {
-      margin-top: 1rem;
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--neutral);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
       padding: 1rem;
-      border-radius: 8px;
-      background-color: #f9fafb;
     }
-    .go { color: green; font-weight: bold; }
-    .nogo { color: red; font-weight: bold; }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: var(--background);
+      border-radius: var(--card-radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      padding: 1.5rem;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      form {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #374151;
+      font-size: 0.95rem;
+    }
+
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input, select {
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background-color: #fff;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    button {
+      grid-column: span 2;
+      padding: 0.85rem;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .result {
+      margin-top: 2rem;
+      background: #f9fafb;
+      border-radius: var(--card-radius);
+      padding: 1.5rem;
+      line-height: 1.7;
+      border-left: 6px solid var(--primary);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .go {
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .nogo {
+      color: var(--danger);
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2> Analyse de rentabilité V 1.2</h2>
-
+    <h2>Analyse de Rentabilité Transport</h2>
     <form id="goNoGoForm">
-      <label>⛽ Prix du gasoil (DH/L)</label>
-      <input type="number" step="0.01" name="gasoilPrice" required min="0">
-
-      <label>⚖️ Poids total du produit (kg)</label>
-      <input type="number" step="1" name="productWeight" required min="0">
-
-      <label>🛒 Prix d'achat du produit (DH)</label>
-      <input type="number" step="0.01" name="purchasePrice" required min="0">
-
-      <label>💸 Prix de vente du produit (DH)</label>
-      <input type="number" step="0.01" name="sellingPrice" required min="0">
-
-      <label>🛣️ Frais d'autoroute (Aller seulement, en DH)</label>
-      <input type="number" step="0.01" name="autoroutePrice" id="autoroutePrice" min="0" value="0">
-
-      <label>🧾 Frais de déplacement chauffeur (DH)</label>
-      <input type="number" step="0.01" name="fraisDeplacement" id="fraisDeplacement" min="0" value="0">
-
-      <label>👨‍🔧 Frais journalier du chauffeur (DH)</label>
-      <input type="number" step="0.01" name="fraisChauffeur" id="fraisChauffeur" min="0" value="0">
-
-      <label>🚚 Ville de départ</label>
-      <select id="startLocation" required><option value="">Ville de départ</option></select>
-
-      <label>📍 Ville d'arrivée</label>
-      <select id="endLocation" required><option value="">Ville d'arrivée</option></select>
-
-      <label>🛣️ Distance aller (km)</label>
-      <input type="number" id="distance" name="distance" step="0.1" readonly>
-
-      <button type="submit">📊 Calculer</button>
+      <div class="input-wrapper">
+        <label>Prix du gasoil (DH/L)</label>
+        <input type="number" name="gasoilPrice" step="0.01" min="0" required />
+      </div>
+      <div class="input-wrapper">
+        <label>Poids total du produit (kg)</label>
+        <input type="number" name="productWeight" step="1" min="0" required />
+      </div>
+      <div class="input-wrapper">
+        <label>Prix d'achat du produit (DH)</label>
+        <input type="number" name="purchasePrice" step="0.01" min="0" required />
+      </div>
+      <div class="input-wrapper">
+        <label>Prix de vente du produit (DH)</label>
+        <input type="number" name="sellingPrice" step="0.01" min="0" required />
+      </div>
+      <div class="input-wrapper">
+        <label>Frais d'autoroute (aller simple, DH)</label>
+        <input type="number" name="autoroutePrice" step="0.01" min="0" value="0" />
+      </div>
+      <div class="input-wrapper">
+        <label>Frais de déplacement chauffeur (DH)</label>
+        <input type="number" name="fraisDeplacement" step="0.01" min="0" value="0" />
+      </div>
+      <div class="input-wrapper">
+        <label>Frais journalier du chauffeur (DH)</label>
+        <input type="number" name="fraisChauffeur" step="0.01" min="0" value="0" />
+      </div>
+      <div class="input-wrapper">
+        <label>Ville de départ</label>
+        <select id="startLocation" required><option value="">Sélectionner</option></select>
+      </div>
+      <div class="input-wrapper">
+        <label>Ville d'arrivée</label>
+        <select id="endLocation" required><option value="">Sélectionner</option></select>
+      </div>
+      <div class="input-wrapper">
+        <label>Distance aller (km)</label>
+        <input type="number" id="distance" name="distance" readonly />
+      </div>
+      <button type="submit">Calculer</button>
     </form>
-
-    <div id="result" class="result" style="display: none;"></div>
+    <div id="result" class="result" style="display:none"></div>
   </div>
-
-  <script>
+ <script>
     const villesDepart = ["Berrechid", "Had Soualem", "Benahmed", "Bouskoura", "Marrakech", "Temara", "Sidi Ghanem"];
     const villesArrivee = [
       "Ain Harrouda", "Benahmed", "Ben Guerir", "Benslimane", "Berrechid", "Bouskoura", "Casablanca",
@@ -424,17 +516,17 @@
 
       document.getElementById("result").style.display = "block";
       document.getElementById("result").innerHTML = `
-        <p><strong>🚗 Véhicule suggéré :</strong> ${vehicule.type}</p>
-        <p><strong>📍 Trajet :</strong> ${start} ➜ ${end} ➜ ${start}</p>
-        <p><strong>↔️ Distance aller-retour :</strong> ${allerRetour} km</p>
-        <p><strong>⛽ Coût carburant :</strong> ${coutCarburant.toFixed(2)} DH</p>
-        <p><strong>🛣️ Frais autoroute (AR) :</strong> ${coutAutoroute.toFixed(2)} DH</p>
-        <p><strong>🧾 Frais déplacement :</strong> ${fraisDeplacement.toFixed(2)} DH</p>
-        <p><strong>👨‍🔧 Frais chauffeur :</strong> ${fraisChauffeur.toFixed(2)} DH</p>
-        <p><strong>💸 Coût total :</strong> ${coutTotal.toFixed(2)} DH</p>
-        <p><strong>💰 Gain brut :</strong> ${gain.toFixed(2)} DH</p>
-        <p><strong>📉 Gain net :</strong> ${(gain - coutTotal).toFixed(2)} DH</p>
-        <p><strong>📊 Seuil max autorisé :</strong> ${seuil.toFixed(2)} DH</p>
+        <p><strong> Véhicule suggéré :</strong> ${vehicule.type}</p>
+        <p><strong> Trajet :</strong> ${start} ➜ ${end} ➜ ${start}</p>
+        <p><strong> Distance aller-retour :</strong> ${allerRetour} km</p>
+        <p><strong> Coût carburant :</strong> ${coutCarburant.toFixed(2)} DH</p>
+        <p><strong> Frais autoroute (AR) :</strong> ${coutAutoroute.toFixed(2)} DH</p>
+        <p><strong> Frais déplacement :</strong> ${fraisDeplacement.toFixed(2)} DH</p>
+        <p><strong> Frais chauffeur :</strong> ${fraisChauffeur.toFixed(2)} DH</p>
+        <p><strong> Coût total :</strong> ${coutTotal.toFixed(2)} DH</p>
+        <p><strong> Gain brut :</strong> ${gain.toFixed(2)} DH</p>
+        <p><strong> Gain net :</strong> ${(gain - coutTotal).toFixed(2)} DH</p>
+        <p><strong> Seuil max autorisé :</strong> ${seuil.toFixed(2)} DH</p>
         <p class="${isGo ? 'go' : 'nogo'}">${isGo ? '✅ GO : Transport rentable' : '❌ NO GO : Trop cher'}</p>
       `;
     });
