@@ -716,3 +716,175 @@
       "Marrakech-Témara": 315,
       "Marrakech-Sidi Yahya El Gharb": 400,
       "Marrakech-Sidi Slimane":
+// Distances pour Temara (compléments)
+  "Temara-Ain Harrouda": 100,
+  "Temara-Ben Guerir": 205,
+  "Temara-Benslimane": 90,
+  "Temara-Bouskoura": 95,
+  "Temara-El Jadida": 140,
+  "Temara-Mediouna": 90,
+  "Temara-Mohammedia": 75,
+  "Temara-Nouaceur": 80,
+  "Temara-Oued Zem": 125,
+  "Temara-Settat": 105,
+  "Temara-Sidi Bennour": 145,
+  "Temara-Sidi Rahal": 115,
+  "Temara-Sidi Smail": 150,
+  "Temara-Soualem": 95,
+  "Temara-Tit Mellil": 100,
+  "Temara-Youssoufia": 175,
+  "Temara-Salé": 25,
+  "Temara-Sidi Yahya El Gharb": 115,
+  "Temara-Sidi Slimane": 125,
+  "Temara-Sidi Taibi": 100,
+  "Temara-Tiflet": 130,
+  "Temara-Ain Atiq": 20,
+  "Temara-Ain El Aouda": 30,
+  "Temara-Oulmès": 155,
+  "Temara-Rommani": 115,
+  "Berrechid-Ain Harrouda": 45,
+  "Berrechid-Benahmed": 35,
+  "Berrechid-Ben Guerir": 155,
+  "Berrechid-Benslimane": 50,
+  "Berrechid-Bouskoura": 30,
+  "Berrechid-Casablanca": 44,
+  "Berrechid-El Jadida": 90,
+  "Berrechid-Had Soualem": 33,
+  "Berrechid-Marrakech": 245,
+  "Berrechid-Mediouna": 35,
+  "Berrechid-Mohammedia": 55,
+  "Berrechid-Nouaceur": 32,
+  "Berrechid-Oued Zem": 105,
+  "Berrechid-Settat": 25,
+  "Berrechid-Sidi Bennour": 105,
+  "Berrechid-Sidi Rahal": 55,
+  "Berrechid-Sidi Smail": 110,
+  "Berrechid-Skhirat": 95,
+  "Berrechid-Soualem": 35,
+  "Berrechid-Temara": 100,
+  "Berrechid-Tit Mellil": 43,
+  "Berrechid-Youssoufia": 150,
+  "Berrechid-Rabat": 97,
+  "Berrechid-Salé": 100,
+  "Berrechid-Kénitra": 135,
+  "Berrechid-Témara": 100,
+  "Berrechid-Sidi Yahya El Gharb": 165,
+  "Berrechid-Sidi Slimane": 175,
+  "Berrechid-Sidi Taibi": 145,
+  "Berrechid-Tiflet": 160,
+  "Berrechid-Ain Atiq": 105,
+  "Berrechid-Ain El Aouda": 115,
+  "Berrechid-Oulmès": 215,
+  "Berrechid-Rommani": 145,
+  "Berrechid-Sidi kacem": 260,
+  "Berrechid-Safi":250,
+  "Berrechid-Fes":350,
+"Berrechid-Béni Mellal": 180,
+"Berrechid-Khouribga": 110,
+"Berrechid-Khénifra": 230,
+"Berrechid-Fquih Ben Salah": 160,
+"Berrechid-Oued Zem": 120,
+"Berrechid-Boujniba": 110,
+"Berrechid-Boulanouare": 120,
+"Berrechid-Bejaad": 140,
+"Berrechid-Kasba Tadla": 190,
+"Berrechid-Souk Sebt Oulad Nemma": 150,
+"Berrechid-El Ksiba": 210,
+"Berrechid-Zaouiat Cheikh": 200,
+  "Had Soualem-Casablanca": 40,
+  "Had Soualem-Rabat": 93,
+  "Had Soualem-Kénitra": 140,
+
+  "Benahmed-Casablanca": 75,
+  "Benahmed-Rabat": 125,
+
+  "Bouskoura-Casablanca": 27,
+  "Bouskoura-Rabat": 100,
+
+  "Marrakech-Casablanca": 250,
+  "Marrakech-Rabat": 325,
+
+  "Temara-Rabat": 20,
+  "Temara-Casablanca": 96,
+  "Temara-Kénitra": 105
+    };
+
+    const startSelect = document.getElementById("startLocation");
+    const endSelect = document.getElementById("endLocation");
+
+    villesDepart.forEach(ville => startSelect.add(new Option(ville, ville)));
+    villesArrivee.forEach(ville => endSelect.add(new Option(ville, ville)));
+
+    function updateDistanceField() {
+      const start = startSelect.value;
+      const end = endSelect.value;
+      const key = `${start}-${end}`;
+      const reverseKey = `${end}-${start}`;
+      const distance = distanceData[key] || distanceData[reverseKey] || "";
+      document.getElementById("distance").value = distance;
+    }
+
+    startSelect.addEventListener("change", updateDistanceField);
+    endSelect.addEventListener("change", updateDistanceField);
+
+    document.getElementById("goNoGoForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const gasoilPrice = parseFloat(document.querySelector("[name='gasoilPrice']").value);
+      const productWeight = parseFloat(document.querySelector("[name='productWeight']").value);
+      const purchasePrice = parseFloat(document.querySelector("[name='purchasePrice']").value);
+      const sellingPrice = parseFloat(document.querySelector("[name='sellingPrice']").value);
+      const autoroutePrice = parseFloat(document.querySelector("[name='autoroutePrice']").value) || 0;
+      const fraisDeplacement = parseFloat(document.querySelector("[name='fraisDeplacement']").value) || 0;
+      const fraisChauffeur = parseFloat(document.querySelector("[name='fraisChauffeur']").value) || 0;
+
+      const start = startSelect.value;
+      const end = endSelect.value;
+      const distance = parseFloat(document.getElementById("distance").value);
+
+      function choisirVehicule(poids) {
+        if (poids <= 2000) return { type: 'Pickup', consommation: 0.10 };
+        if (poids <= 3000) return { type: 'H100', consommation: 0.13 };
+        if (poids <= 3500) return { type: 'Master petite', consommation: 0.12 };
+        if (poids <= 4000) return { type: 'Master Renault', consommation: 0.12 };
+        if (poids <= 5000) return { type: 'Iveco Fourgon', consommation: 0.15 };
+        if (poids <= 7000) return { type: 'Canter', consommation: 0.20 };
+        if (poids <= 12000) return { type: 'Solo', consommation: 0.27 };
+        if (poids <= 27000) return { type: 'Camion Plateau', consommation: 0.36 };
+        if (poids <= 40000) return { type: 'Camion Benne', consommation: 0.42 };
+        return null;
+      }
+
+      const vehicule = choisirVehicule(productWeight);
+      if (!vehicule || !distance) {
+        alert("❌ Distance non trouvée ou véhicule non supporté.");
+        return;
+      }
+
+      const allerRetour = distance * 2;
+      const coutCarburant = allerRetour * vehicule.consommation * gasoilPrice;
+      const coutAutoroute = autoroutePrice * 2;
+      const coutTotal = coutCarburant + coutAutoroute + fraisDeplacement + fraisChauffeur;
+      const gain = sellingPrice - purchasePrice;
+      const seuil = gain / 4;
+      const isGo = coutTotal <= seuil;
+
+      document.getElementById("result").style.display = "block";
+      document.getElementById("result").innerHTML = `
+        <p><strong>🚗 Véhicule suggéré :</strong> ${vehicule.type}</p>
+        <p><strong>📍 Trajet :</strong> ${start} ➜ ${end} ➜ ${start}</p>
+        <p><strong>↔️ Distance aller-retour :</strong> ${allerRetour} km</p>
+        <p><strong>⛽ Coût carburant :</strong> ${coutCarburant.toFixed(2)} DH</p>
+        <p><strong>🛣️ Frais autoroute (AR) :</strong> ${coutAutoroute.toFixed(2)} DH</p>
+        <p><strong>🧾 Frais déplacement :</strong> ${fraisDeplacement.toFixed(2)} DH</p>
+        <p><strong>👨‍🔧 Frais chauffeur :</strong> ${fraisChauffeur.toFixed(2)} DH</p>
+        <p><strong>💸 Coût total :</strong> ${coutTotal.toFixed(2)} DH</p>
+        <p><strong>💰 Gain brut :</strong> ${gain.toFixed(2)} DH</p>
+        <p><strong>📉 Gain net :</strong> ${(gain - coutTotal).toFixed(2)} DH</p>
+        <p><strong>📊 Seuil max autorisé :</strong> ${seuil.toFixed(2)} DH</p>
+        <p class="${isGo ? 'go' : 'nogo'}">${isGo ? '✅ GO : Transport rentable' : '❌ NO GO : Trop cher'}</p>
+      `;
+    });
+  </script>
+</body>
+</html>
